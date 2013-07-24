@@ -1,5 +1,5 @@
 #include "GameScene.h"
-#include "Beauty.h"
+
 using namespace cocos2d;
 
 CCScene* GameScene::scene()
@@ -66,14 +66,22 @@ bool GameScene::init()
         // Add the sprite to HelloWorld layer as a child layer.
         this->addChild(pSprite, 0);
 
-        /*
-        CCSprite* icon = CCSprite::create("07.png");
-        icon->setPosition(ccp(100, 100));
-        icon->setScale(0.4f);
-        this->addChild(icon);
-        */
+        
+
+        
+        this->setTouchEnabled(true);
         this->initBackGround();
         this->intBeauties();
+
+        /*
+        CCSprite* icon = CCSprite::createWithSpriteFrameName("02.png");
+        icon->setPosition(ccp(100, 100));  
+        this->addChild(icon);
+        CCFlipX3D* flipx = CCFlipX3D::create(1);
+        icon->runAction(flipx);
+        */
+
+        scheduleUpdate();
         bRet = true;
     } while (0);
 
@@ -169,6 +177,47 @@ void GameScene::setBeautiesPosition(){
         
     }
     
+}
+
+void GameScene::ccTouchesBegan(cocos2d::CCSet *pTouches, cocos2d::CCEvent *pEvent)
+{
+    //return true;
+}
+
+void GameScene::ccTouchesEnded(cocos2d::CCSet *pTouches, cocos2d::CCEvent *pEvent)
+{
+ 	CCSetIterator it = pTouches->begin();
+    CCPoint pt;
+	for(; it != pTouches->end(); it++)
+    {
+		CCTouch *pTouch = (CCTouch*)*it;
+		pt = CCDirector::sharedDirector()->convertToGL(pTouch->getLocationInView());
+		//CCLog("pt.x %f ** pt.y %f", pt.x, pt.y);
+
+        //break;
+	}
+    int index = 0;
+    for(int j = 0; j < (int)(m_pBeautiesRoot->count()); j++){
+        Beauty * _Beauty = (Beauty *)m_pBeautiesRoot->objectAtIndex(j);
+        if(_Beauty && _Beauty->getSpriteBeauty()->isVisible() && _Beauty->getSpriteBeauty()->boundingBox().containsPoint(pt)){
+            //CCRect rect = 
+            int _index = _Beauty->getSpriteBeauty()->getZOrder();
+            if(_index > index){
+                _Beauty->flip();
+                 //CCLog("the index is %d", index);
+                break;           
+            }else{
+                index = _index;
+            }
+
+            
+
+        }
+    }
+}
+
+void GameScene::update(float time){
+    //CCLog("update");
 }
 
 void GameScene::menuCloseCallback(CCObject* pSender)

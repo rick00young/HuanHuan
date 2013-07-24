@@ -2,7 +2,7 @@
 #define __HELLOWORLD_SCENE_H__
 
 #include "cocos2d.h"
-
+#include "Beauty.h"
 #include "Box2D/Box2D.h"
 
 #include "SimpleAudioEngine.h"
@@ -30,12 +30,17 @@ public:
     CC_SYNTHESIZE(cocos2d::CCArray *, m_pBeauties, Beauties);
 
     CC_SYNTHESIZE(cocos2d::CCArray *, m_pBeautiesRoot, BeautiesRoot);
+    virtual void ccTouchesBegan(cocos2d::CCSet *pTouches, cocos2d::CCEvent *pEvent);
+    virtual void ccTouchesEnded(cocos2d::CCSet *pTouches, cocos2d::CCEvent *pEvent);
 
 private:
     void initBackGround();
     void intBeauties();
     void setBeautiesPosition();
     void disPatchBeauties();
+    Beauty* firstBeauty;
+    Beauty* secondBeauty;
+    virtual void update(float time);
     //void reorderChild(cocos2d::CCSprite*  child, int zOrder);
 
 };

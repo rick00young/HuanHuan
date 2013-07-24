@@ -14,11 +14,12 @@ public:
     CC_SYNTHESIZE(int, _indexX, indexX);
     CC_SYNTHESIZE(int, _indexY, indexY);
     CC_SYNTHESIZE(cocos2d::CCSprite *, _spriteBeauty, SpriteBeauty);//getter and setter
-
+    void flip();
 private:
     int _level;
     void showFace();
     void showBack();
+    
 
 };
 

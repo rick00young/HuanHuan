@@ -34,9 +34,10 @@ bool Beauty::createBeauty(cocos2d::CCSpriteBatchNode *pBatchNodeBeauty, int leve
 
     this->setSpriteBeauty(CCSprite::createWithSpriteFrameName("back.png"));
     pBatchNodeBeauty->addChild(_spriteBeauty);
+    
     //s_spriteBeauty->setScale(0.7f);
     //_spriteBeauty->setPosition(ccp(100, 100)); 
-    
+    //this->setFlipY
     return true;
    
 }
@@ -49,6 +50,12 @@ void Beauty::showFace(){
     if(frame){
         _spriteBeauty->setDisplayFrame(frame); 
     }
+}
+
+void Beauty::flip(){
+    CCLog("pt.x ** pt.y ");
+    CCFlipX3D* flipx = CCFlipX3D::create(4);
+    _spriteBeauty->runAction(flipx);
 }
 
 void Beauty::showBack(){
