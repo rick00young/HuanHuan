@@ -246,7 +246,7 @@ void GameScene::update(float time){
         
 	}
 
-    if(m_pBeautiesOpen->count() > 2){
+    if(m_pBeautiesOpen->count() >= 2){
         currentBeauty = (CardSprite *) m_pBeautiesOpen->objectAtIndex(0);
         firstBeauty = (CardSprite *) m_pBeautiesOpen->objectAtIndex(1);
 
@@ -259,8 +259,13 @@ void GameScene::update(float time){
             firstBeauty->setVisible(false);
             
         }else{
-            currentBeauty->closeCard();
-            firstBeauty->closeCard();
+            if(m_pBeautiesOpen->count()> 2){
+                currentBeauty->closeCard();
+                firstBeauty->closeCard();  
+                secondBeauty = (CardSprite *) m_pBeautiesOpen->objectAtIndex(2);
+                secondBeauty->closeCard();
+            }
+
         }
         
     }
