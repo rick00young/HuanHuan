@@ -81,16 +81,16 @@ void CardSprite::initData(int level)
     
     CCFiniteTimeAction *releaseFunc = CCCallFunc::create(this, callfunc_selector(CardSprite::changeStatus));
 
-    m_openAnimIn = (CCActionInterval*)CCSequence::create(CCDelayTime::create(0.5f),
+    m_openAnimIn = (CCActionInterval*)CCSequence::create(CCDelayTime::create(0.2f),
                                                          //CCDelayTime::create(0.3f),
                                                          CCShow::create(),
-                                                         CCOrbitCamera::create(0.5f, 1, 0, kInAngleZ, kInDeltaZ, 0, 0),
+                                                         CCOrbitCamera::create(0.2f, 1, 0, kInAngleZ, kInDeltaZ, 0, 0),
                                                          NULL);
     m_openAnimIn->retain();
     
-    m_openAnimOut = (CCActionInterval *)CCSequence::create(CCOrbitCamera::create(0.5f, 1, 0, kOutAngleZ, kOutDeltaZ, 0, 0),
+    m_openAnimOut = (CCActionInterval *)CCSequence::create(CCOrbitCamera::create(0.2f, 1, 0, kOutAngleZ, kOutDeltaZ, 0, 0),
                                                            CCHide::create(),
-                                                           CCDelayTime::create(0.5f),
+                                                           CCDelayTime::create(0.2f),
                                                            //CCDelayTime::create(2.5f),
                                                            releaseFunc,
                                                            NULL);
@@ -124,6 +124,27 @@ void CardSprite::closeCard()
     
 }
 
+void CardSprite::hideCard()
+{
+    CCSprite* inCard = (CCSprite*)getChildByTag(tag_inCard);
+    CCSprite* outCard = (CCSprite*)getChildByTag(tag_outCard);
+
+    CCSize size = CCDirector::sharedDirector()->getWinSize();
+    CCPoint pos = this->getPosition();
+    CCRect box = inCard->boundingBox();
+
+    
+    CCShuffleTiles* shuffle = CCShuffleTiles::create(1.0f, CCSizeMake(100,134), 25);
+    
+    CCActionInterval* shuffle_back = shuffle->reverse();
+    CCFiniteTimeAction *releaseFunc = CCCallFunc::create(this, callfunc_selector(CardSprite::setDone));
+    //CCDelayTime* delay = CCDelayTime::create(2);
+
+    //return CCSequence::create(shuffle, delay, shuffle_back, NULL);
+    //CCRipple3D* _CCRipple3D = CCRipple3D::create(1.0f, CCSizeMake(100,134), pos, box.size.width, 2, 50); 
+
+    this->runAction(CCSequence::create(shuffle, shuffle_back, releaseFunc, NULL));
+}
 
 void CardSprite::touchDelegateRetain()
 {
@@ -193,4 +214,5 @@ void CardSprite::changeStatus()
     }
     */
     isReady = true;
+    this->hideCard();
 }

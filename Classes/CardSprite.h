@@ -39,6 +39,7 @@ private:
 public:
     void openCard();
     void closeCard();
+    void hideCard();
     virtual void touchDelegateRetain();
     //virtual void touchDelegateRelease();
     virtual bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent);
