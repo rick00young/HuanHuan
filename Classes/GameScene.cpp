@@ -255,8 +255,8 @@ void GameScene::update(float time){
         CCLog("-----========================------");
         if(currentBeauty->getLevel() == firstBeauty->getLevel()){
             CCLog("it is the same");
-            //currentBeauty->hideCard();
-            //firstBeauty->hideCard();
+            currentBeauty->hideCard();
+            firstBeauty->hideCard();
             
         }else{
             if(m_pBeautiesOpen->count()> 2){

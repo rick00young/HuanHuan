@@ -61,6 +61,7 @@ void CardSprite::initData(int level)
 {
     //CCDirector::sharedDirector()->getTouchDispatcher()->addStandardDelegate(this, kCCMenuHandlerPriority);
     CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, kCCMenuHandlerPriority, true);
+    //this->setContentSize(CCSizeMake(100,134));
 
     m_isOpened = false;
     isReady = true;
@@ -133,17 +134,25 @@ void CardSprite::hideCard()
     CCPoint pos = this->getPosition();
     CCRect box = inCard->boundingBox();
 
+    /*
+    CCShuffleTiles* shuffle = CCShuffleTiles::create(1.0f, CCSizeMake(24,24), 25);
     
-    CCShuffleTiles* shuffle = CCShuffleTiles::create(1.0f, CCSizeMake(100,134), 25);
-    
-    CCActionInterval* shuffle_back = shuffle->reverse();
+    //CCActionInterval* shuffle_back = shuffle->reverse();
     CCFiniteTimeAction *releaseFunc = CCCallFunc::create(this, callfunc_selector(CardSprite::setDone));
-    //CCDelayTime* delay = CCDelayTime::create(2);
+    
 
     //return CCSequence::create(shuffle, delay, shuffle_back, NULL);
     //CCRipple3D* _CCRipple3D = CCRipple3D::create(1.0f, CCSizeMake(100,134), pos, box.size.width, 2, 50); 
 
-    this->runAction(CCSequence::create(shuffle, shuffle_back, releaseFunc, NULL));
+    this->runAction(CCSequence::create(shuffle,delay, releaseFunc, NULL));
+    */
+    CCDelayTime* delay = CCDelayTime::create(0.5f);
+
+    CCScaleTo* _CCScaleTo =  CCScaleTo::create(0.8f, 0.1f);
+    CCRotateTo* _CCRotateTo = CCRotateTo::create(0.8f,1080);
+    CCFadeOut* _CCFadeOut = CCFadeOut::create(0.3f);
+    CCFiniteTimeAction *releaseFunc = CCCallFunc::create(this, callfunc_selector(CardSprite::setDone));
+    this->runAction(CCSequence::create(delay, CCSpawn::create(_CCFadeOut, _CCScaleTo, _CCRotateTo, NULL), releaseFunc, NULL));
 }
 
 void CardSprite::touchDelegateRetain()
@@ -214,5 +223,5 @@ void CardSprite::changeStatus()
     }
     */
     isReady = true;
-    this->hideCard();
+    //this->hideCard();
 }
