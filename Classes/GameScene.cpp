@@ -90,7 +90,7 @@ bool GameScene::init()
  
         card->openCard();//¿ªÊ¼·­ÅÆ</span>*/
 
-        scheduleUpdate();
+        //scheduleUpdate();
         bRet = true;
     } while (0);
 
@@ -124,11 +124,11 @@ void GameScene::intBeauties(){
     for(int i = 0;i < 6; i++){
         int index = rand() % 7;
         CCLog("the index is %d", index);
-        CardSprite* _Beauty = CardSprite::create(index);
+        CardSprite* _Beauty = CardSprite::create(this, index);
         this->addChild(_Beauty);
         m_pBeauties->addObject(_Beauty);
 
-        _Beauty = CardSprite::create(index);
+        _Beauty = CardSprite::create(this, index);
         this->addChild(_Beauty);
         m_pBeauties->addObject(_Beauty);
         
@@ -259,9 +259,9 @@ void GameScene::update(float time){
             firstBeauty->hideCard();
             
         }else{
+            currentBeauty->closeCard();
+            firstBeauty->closeCard();  
             if(m_pBeautiesOpen->count()> 2){
-                currentBeauty->closeCard();
-                firstBeauty->closeCard();  
                 secondBeauty = (CardSprite *) m_pBeautiesOpen->objectAtIndex(2);
                 secondBeauty->closeCard();
             }
@@ -277,6 +277,11 @@ void GameScene::update(float time){
     //CCLog();
 }
 
+
+void GameScene::okForClip()
+{
+    CCLog("okfor clip");
+}
 void GameScene::menuCloseCallback(CCObject* pSender)
 {
     // "close" menu item clicked

@@ -7,6 +7,7 @@
 //
 
 #include "CardSprite.h"
+#include "GameScene.h"
 
 #define kInAngleZ        270 //里面卡牌的起始Z轴角度
 #define kInDeltaZ        90  //里面卡牌旋转的Z轴角度差
@@ -30,10 +31,10 @@ CardSprite::~CardSprite()
     m_openAnimOut->release();
 }
 
-CardSprite* CardSprite::create(int level)
+CardSprite* CardSprite::create(GameScene *gameScene, int level)
 {
     CardSprite *pSprite = new CardSprite();
-    if (pSprite && pSprite->init(level))
+    if (pSprite && pSprite->init(gameScene, level))
     {
         pSprite->autorelease();
         return pSprite;
@@ -42,27 +43,23 @@ CardSprite* CardSprite::create(int level)
     return NULL;
 }
 
-bool CardSprite::init(int level)
+bool CardSprite::init(GameScene *gameScene, int level)
 {
     if (!CCSprite::init())
     {
         return false;
     }
-    initData(level);
+    initData(gameScene, level);
     return true;
 }
-/*
-void CardSprite::onEnter(){
-    CCLog("on enter");
-    CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, kCCMenuHandlerPriority, true);
-}
-*/
-void CardSprite::initData(int level)
+
+void CardSprite::initData(GameScene *gameScene, int level)
 {
     //CCDirector::sharedDirector()->getTouchDispatcher()->addStandardDelegate(this, kCCMenuHandlerPriority);
     CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, kCCMenuHandlerPriority, true);
     //this->setContentSize(CCSizeMake(100,134));
-
+    this->setgameScene(gameScene);
+    CCLog("this->setgameScene(gameScene);");
     m_isOpened = false;
     isReady = true;
     _level = level;
@@ -179,7 +176,7 @@ bool CardSprite::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent){
     if(rect.containsPoint(pt)){
         if(isReady){
             m_isOpened = true;
-            CCLog("containsPoint");
+            //CCLog("containsPoint");
             this->openCard();
         }
         return true;
@@ -214,6 +211,7 @@ void CardSprite::setDone(){
 void CardSprite::changeStatus()
 {
     CCLog("change status");
+    this->getgameScene()->okForClip();
     //return;
     /*
     if(m_isOpened){

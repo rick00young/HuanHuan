@@ -11,6 +11,7 @@
 #include "cocos2d.h"
 USING_NS_CC;
 
+class GameScene;
 class CardSprite : public CCSprite,public CCTargetedTouchDelegate
 {
 public:
@@ -18,8 +19,10 @@ public:
     ~CardSprite();
     //virtual void onEnter();
     //virtual void onExit();
-    static CardSprite* create(int level);
-    virtual bool init(int level);
+    static CardSprite* create(GameScene *gameScene, int level);
+    virtual bool init(GameScene *gameScene, int level);
+
+    CC_SYNTHESIZE(GameScene *, m_pgameScene, gameScene);
     int getLevel();
     bool getOpened();
     void setDone();
@@ -34,7 +37,7 @@ private:
     CCActionInterval* m_openAnimOut;
     
     
-    void initData(int level);
+    void initData(GameScene *gameScene, int level);
     
 public:
     void openCard();

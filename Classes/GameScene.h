@@ -35,6 +35,7 @@ public:
     CC_SYNTHESIZE(cocos2d::CCArray *, m_pBeautiesOpen, BeautiesOpen);
     //virtual void ccTouchesBegan(cocos2d::CCSet *pTouches, cocos2d::CCEvent *pEvent);
     //virtual void ccTouchesEnded(cocos2d::CCSet *pTouches, cocos2d::CCEvent *pEvent);
+    void okForClip();
 
 private:
     void initBackGround();
