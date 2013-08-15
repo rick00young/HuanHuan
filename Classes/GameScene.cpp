@@ -1,5 +1,4 @@
 #include "GameScene.h"
-
 using namespace cocos2d;
 
 CCScene* GameScene::scene()
@@ -124,11 +123,11 @@ void GameScene::intBeauties(){
     for(int i = 0;i < 6; i++){
         int index = rand() % 7;
         CCLog("the index is %d", index);
-        CardSprite* _Beauty = CardSprite::create(this, index);
+        CardSprite* _Beauty = CardSprite::create(index);
         this->addChild(_Beauty);
         m_pBeauties->addObject(_Beauty);
 
-        _Beauty = CardSprite::create(this, index);
+        _Beauty = CardSprite::create(index);
         this->addChild(_Beauty);
         m_pBeauties->addObject(_Beauty);
         

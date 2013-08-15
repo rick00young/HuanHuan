@@ -1,4 +1,6 @@
 #include "HelloWorldScene.h"
+#include "TT.h"
+#include "GameScene.h"
 #include "SimpleAudioEngine.h"
 
 using namespace cocos2d;
@@ -46,30 +48,27 @@ bool HelloWorld::init()
     pMenu->setPosition( CCPointZero );
     this->addChild(pMenu, 1);
 
-    /////////////////////////////
-    // 3. add your codes below...
 
-    // add a label shows "Hello World"
-    // create and initialize a label
-    CCLabelTTF* pLabel = CCLabelTTF::create("Hello World", "Thonburi", 34);
+    UILayer* ul = UILayer::create();
+    ul->scheduleUpdate();
+    this->addChild(ul);
+    UIButton* exit = UIButton::create();
+    exit->setTextures("CloseNormal.png", "CloseSelected.png", "");
+    exit->setPosition(ccp(430, 60));
+    exit->setTouchEnable(true);
+    //exit->addReleaseEvent(this, coco_releaseselector(HelloWorld::toCocosGUITestScene));
+
+    ul->addWidget(exit);
 
-    // ask director the window size
-    CCSize size = CCDirector::sharedDirector()->getWinSize();
+    UIWidget* ui = CCUIHELPER->createWidgetFromJsonFile("start/Export/start_1/start_1.json");
+    ui->setWidgetTag(EXAMPLE_PANEL_TAG_ROOT);
+    ul->addWidget(ui);
 
-    // position the label on the center of the screen
-    pLabel->setPosition( ccp(size.width / 2, size.height - 20) );
-
-    // add the label as a child to this layer
-    this->addChild(pLabel, 1);
-
-    // add "HelloWorld" splash screen"
-    CCSprite* pSprite = CCSprite::create("HelloWorld.png");
-
-    // position the sprite on the center of the screen
-    pSprite->setPosition( ccp(size.width/2, size.height/2) );
-
-    // add the sprite as a child to this layer
-    this->addChild(pSprite, 0);
+    //bind event
+    UIWidget* example_root = dynamic_cast<UIPanel*>(ul->getWidgetByTag(EXAMPLE_PANEL_TAG_ROOT));
+    UIButton* button_new_game = dynamic_cast<UIButton*>(example_root->getChildByName("newgame")); 
+    CCLog("button_pannel is %d", button_new_game);
+    button_new_game->addReleaseEvent(this, coco_releaseselector(HelloWorld::StartNewGame));
     
     return true;
 }
@@ -81,4 +80,12 @@ void HelloWorld::menuCloseCallback(CCObject* pSender)
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     exit(0);
 #endif
+}
+
+void HelloWorld::StartNewGame(CCObject *pSender)
+{
+    CCLog("newGame ");
+    CCDirector* pDirector = CCDirector::sharedDirector();
+    CCScene *pScene = GameScene::scene();
+    CCDirector::sharedDirector()->replaceScene(CCTransitionFade::create(1, pScene));
 }

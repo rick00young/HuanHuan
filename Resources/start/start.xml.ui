@@ -2,10 +2,10 @@
 <UIProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Version>0.3.0.0</Version>
   <Name>start</Name>
-  <ProjectDir>C:\Users\baimi\Desktop\start</ProjectDir>
+  <ProjectDir>C:\S\Cocos2dx_v2.1.4f\projects\HuanHuan\Resources\start</ProjectDir>
   <SceneJson>start.json</SceneJson>
-  <Resources>C:\Users\baimi\Desktop\start\Resources</Resources>
-  <JsonFolder>C:\Users\baimi\Desktop\start\Json</JsonFolder>
+  <Resources>C:\S\Cocos2dx_v2.1.4f\projects\HuanHuan\Resources\start\Resources</Resources>
+  <JsonFolder>C:\S\Cocos2dx_v2.1.4f\projects\HuanHuan\Resources\start\Json</JsonFolder>
   <JsonList>
     <string>start_1.json</string>
   </JsonList>

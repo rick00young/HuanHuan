@@ -3,6 +3,10 @@
 
 #include "cocos2d.h"
 
+#define EXAMPLE_PANEL_TAG_ROOT 1
+#include "cocos-ext.h"
+using namespace cocos2d::extension;
+
 class HelloWorld : public cocos2d::CCLayer
 {
 public:
@@ -14,6 +18,8 @@ public:
     
     // a selector callback
     void menuCloseCallback(CCObject* pSender);
+
+    void StartNewGame(CCObject* pSender);
 
     // implement the "static node()" method manually
     CREATE_FUNC(HelloWorld);

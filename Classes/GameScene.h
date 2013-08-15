@@ -1,8 +1,7 @@
-#ifndef __HELLOWORLD_SCENE_H__
-#define __HELLOWORLD_SCENE_H__
+#ifndef __GAMESCENE_SCENE_H__
+#define __GAMESCENE_SCENE_H__
 
 #include "cocos2d.h"
-#include "Beauty.h"
 #include "CardSprite.h"
 #include "Box2D/Box2D.h"
 
@@ -11,7 +10,6 @@
 #define WIDTH 62
 
 #define HEIGHT 62
-
 
 class GameScene : public cocos2d::CCLayer
 {
@@ -50,4 +48,4 @@ private:
 
 };
 
-#endif  // __HELLOWORLD_SCENE_H__
+#endif  // __GAMESCENE_SCENE_H__
