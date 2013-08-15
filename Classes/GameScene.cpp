@@ -123,11 +123,11 @@ void GameScene::intBeauties(){
     for(int i = 0;i < 6; i++){
         int index = rand() % 7;
         CCLog("the index is %d", index);
-        CardSprite* _Beauty = CardSprite::create(index);
+        CardSprite* _Beauty = CardSprite::create(this, index);
         this->addChild(_Beauty);
         m_pBeauties->addObject(_Beauty);
 
-        _Beauty = CardSprite::create(index);
+        _Beauty = CardSprite::create(this, index);
         this->addChild(_Beauty);
         m_pBeauties->addObject(_Beauty);
         
