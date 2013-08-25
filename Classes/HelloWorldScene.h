@@ -19,10 +19,14 @@ public:
     // a selector callback
     void menuCloseCallback(CCObject* pSender);
 
-    void StartNewGame(CCObject* pSender);
+    void startNewGame(CCObject* pSender);
+    void showAbout(CCObject* pSender);
+    void closeAbout(CCObject* pSender);
 
     // implement the "static node()" method manually
     CREATE_FUNC(HelloWorld);
+
+    UILayer* ul;
 };
 
 #endif // __HELLOWORLD_SCENE_H__

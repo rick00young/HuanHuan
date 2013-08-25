@@ -37,6 +37,7 @@ public:
     void closeCard();
     void hideCard();
     virtual void touchDelegateRetain();
+    virtual void touchDelegateRelease();
     //virtual void touchDelegateRelease();
     virtual bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent);
     //virtual void ccTouchMove(CCTouch* touch, CCEvent* event);

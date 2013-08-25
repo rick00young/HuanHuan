@@ -21,6 +21,8 @@ CardSprite::~CardSprite()
 {
     m_openAnimIn->release();
     m_openAnimOut->release();
+    this->release();
+    CCLog("CardSprite release");
 }
 
 CardSprite* CardSprite::create(GameScene *gameScene, int level)
@@ -123,18 +125,6 @@ void CardSprite::hideCard()
     CCPoint pos = this->getPosition();
     CCRect box = inCard->boundingBox();
 
-    /*
-    CCShuffleTiles* shuffle = CCShuffleTiles::create(1.0f, CCSizeMake(24,24), 25);
-    
-    //CCActionInterval* shuffle_back = shuffle->reverse();
-    CCFiniteTimeAction *releaseFunc = CCCallFunc::create(this, callfunc_selector(CardSprite::setDone));
-    
-
-    //return CCSequence::create(shuffle, delay, shuffle_back, NULL);
-    //CCRipple3D* _CCRipple3D = CCRipple3D::create(1.0f, CCSizeMake(100,134), pos, box.size.width, 2, 50); 
-
-    this->runAction(CCSequence::create(shuffle,delay, releaseFunc, NULL));
-    */
     CCDelayTime* delay = CCDelayTime::create(0.5f);
 
     CCScaleTo* _CCScaleTo =  CCScaleTo::create(0.8f, 0.1f);
@@ -142,11 +132,21 @@ void CardSprite::hideCard()
     CCFadeOut* _CCFadeOut = CCFadeOut::create(0.3f);
     CCFiniteTimeAction *releaseFunc = CCCallFunc::create(this, callfunc_selector(CardSprite::setDone));
     this->runAction(CCSequence::create(delay, CCSpawn::create(_CCFadeOut, _CCScaleTo, _CCRotateTo, NULL), releaseFunc, NULL));
+
+    _isDone = true;;
 }
 
 void CardSprite::touchDelegateRetain()
 {
     this->retain();
+}
+
+void CardSprite::touchDelegateRelease()
+{
+    
+    CCTouchDispatcher* pDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
+    pDispatcher->removeDelegate(this);
+    this->release();
 }
 
 bool CardSprite::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent){
@@ -166,7 +166,7 @@ bool CardSprite::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent){
 
     //CCLog("this box is %f---%f", rect.size.width, rect.size.height);
     if(rect.containsPoint(pt)){
-        if(isReady){
+        if(isReady && this->getgameScene()->isOkForClip()){
             m_isOpened = true;
             //CCLog("containsPoint");
             this->openCard();
@@ -203,7 +203,10 @@ void CardSprite::setDone(){
 void CardSprite::changeStatus()
 {
     CCLog("change status");
-    this->getgameScene()->okForClip();
+    if(m_isOpened && !getDone()){
+        this->getgameScene()->gameLogic(this);
+    }
+    
     //return;
     /*
     if(m_isOpened){

@@ -1,5 +1,11 @@
 #include "GameScene.h"
+#include "MenuScene.h"
 using namespace cocos2d;
+
+GameScene::GameScene() : firstBeauty(NULL),secondBeauty(NULL), currentBeauty(NULL)
+{
+
+}
 
 CCScene* GameScene::scene()
 {
@@ -34,67 +40,36 @@ bool GameScene::init()
 
         CC_BREAK_IF(! CCLayer::init());
 
-        CCMenuItemImage *pCloseItem = CCMenuItemImage::create(
-            "CloseNormal.png",
-            "CloseSelected.png",
-            this,
-            menu_selector(GameScene::menuCloseCallback));
-        CC_BREAK_IF(! pCloseItem);
 
-        // Place the menu item bottom-right conner.
-        pCloseItem->setPosition(ccp(CCDirector::sharedDirector()->getWinSize().width - 20, 20));
-
-        // Create a menu with the "close" menu item, it's an auto release object.
-        CCMenu* pMenu = CCMenu::create(pCloseItem, NULL);
-        pMenu->setPosition(CCPointZero);
-        CC_BREAK_IF(! pMenu);
-
-        // Add the menu to HelloWorld layer as a child layer.
-        this->addChild(pMenu, 1);
-
-        // 3. Add add a splash screen, show the cocos2d splash image.
         CCSize size = CCDirector::sharedDirector()->getWinSize();
-        
+        //backgroud
         CCSprite* pSprite = CCSprite::create("bg1.jpg");
         pSprite->setScale(0.4f);
         CC_BREAK_IF(! pSprite);
-
-        // Place the sprite on the center of the screen
         pSprite->setPosition(ccp(size.width/2, size.height/2));
-
-        // Add the sprite to HelloWorld layer as a child layer.
         this->addChild(pSprite, 0);
-
-        
-
-        
+                
         //this->setTouchEnabled(true);
         this->initBackGround();
         this->intBeauties();
 
-        /*
-        CCSprite* icon = CCSprite::createWithSpriteFrameName("02.png");
-        icon->setPosition(ccp(100, 100));  
-        this->addChild(icon);
-        CCFlipX3D* flipx = CCFlipX3D::create(1);
-        icon->runAction(flipx);
-        
-        //创建翻牌sprite, 参数：卡片里面的图，卡片的封面，翻牌所花时间
- 
-        CardSprite* card = CardSprite::create(3);
- 
-        card->setPosition(ccp(size.width * .5, size.height * .5));
- 
-        addChild(card);
- 
-        card->openCard();//开始翻牌</span>*/
+        //locd UI;
+        ul = UILayer::create();
+        ul->scheduleUpdate();
+        this->addChild(ul);
+
+        UIWidget* ui = CCUIHELPER->createWidgetFromJsonFile("gameUI/Export/gameUI_1/gameUI_1.json");
+        ui->setWidgetTag(EXAMPLE_PANEL_TAG_ROOT);
+        ul->addWidget(ui);
 
         //scheduleUpdate();
+        bindCallbacks();
         bRet = true;
     } while (0);
 
     return bRet;
 }
+
 
 void GameScene::initBackGround()
 {
@@ -146,17 +121,11 @@ void GameScene::disPatchBeauties()
     m_pBeautiesOpen = new CCArray;
     
     while(m_pBeauties->count() > 0){
-    
         CardSprite * _Beauty = (CardSprite *)m_pBeauties->randomObject();
         //CCLog("the index is %d", m_pIcons->indexOfObject(_linkIcon));
-
-        m_pBeautiesRoot->addObject(_Beauty);
-        
+        m_pBeautiesRoot->addObject(_Beauty);    
         m_pBeauties->removeObject(_Beauty, false);
     }
-    
-    //CCLog("the m_pIcons count is %d", m_pIcons->count());
-    //CCLog("the m_pIconsRoot count is %d", m_pIconsRoot->count());
     
 }
 
@@ -167,7 +136,7 @@ void GameScene::setBeautiesPosition(){
     int x = 84;
     int y = 80;
     int j = 0;
-    
+    CCMoveTo* moveTo;
     while(index < (int)(m_pBeautiesRoot->count())){
         CardSprite * _Beauty = (CardSprite *)m_pBeautiesRoot->objectAtIndex(index);
         //CCLog("the index is %d", m_pIconsRoot->indexOfObject(_linkIcon));
@@ -175,13 +144,18 @@ void GameScene::setBeautiesPosition(){
             x = 84;
             if( index > 1)
                 y = y + 140;
-            _Beauty->setPosition(ccp(x,y));
+            moveTo = CCMoveTo::create(0.5f, ccp(x,y));
+            _Beauty->runAction(moveTo);
+            //_Beauty->setPosition(ccp(x,y));
             //_Beauty->openCard();
             reorderChild(_Beauty, index + 1);
             
         }else{
             x = x + 60;
-            _Beauty->setPosition(ccp(x,y));
+            moveTo = CCMoveTo::create(0.5f, ccp(x,y));
+            _Beauty->runAction(moveTo);
+
+            //_Beauty->setPosition(ccp(x,y));
             reorderChild(_Beauty, index + 1);
             //_Beauty->openCard();
         }
@@ -195,91 +169,97 @@ void GameScene::setBeautiesPosition(){
     
 }
 
-/*
-void GameScene::ccTouchesBegan(cocos2d::CCSet *pTouches, cocos2d::CCEvent *pEvent)
-{
-    //return true;
-}
 
-void GameScene::ccTouchesEnded(cocos2d::CCSet *pTouches, cocos2d::CCEvent *pEvent)
-{
- 	CCSetIterator it = pTouches->begin();
-    CCPoint pt;
-	for(; it != pTouches->end(); it++)
-    {
-		CCTouch *pTouch = (CCTouch*)*it;
-		pt = CCDirector::sharedDirector()->convertToGL(pTouch->getLocationInView());
-		//CCLog("pt.x %f ** pt.y %f", pt.x, pt.y);
-
-        //break;
-	}
-    int index = 0;
-    
-    for(int j = (int)(m_pBeautiesRoot->count()); j > 0; j--){
-        CardSprite * _Beauty = (CardSprite *)m_pBeautiesRoot->objectAtIndex(j - 1);
-        if(_Beauty){
-
-
-            //_Beauty->openCard();
-            break;
-
-        }
-    }
-    
-}
-*/
 void GameScene::update(float time){
-    //CCLog("update");
-    CCObject *beauty = NULL;
-	CCARRAY_FOREACH(m_pBeautiesRoot, beauty){
-		
-		CardSprite *m_pBeauty = (CardSprite *)beauty;
-        if(m_pBeauty->getOpened() && m_pBeauty->isVisible()){
-            
-            m_pBeautiesOpen->addObject(m_pBeauty);
-            if(m_pBeautiesOpen->count() > 3){
-                break;
-            }
 
-        }
-        
-	}
-
-    if(m_pBeautiesOpen->count() >= 2){
-        currentBeauty = (CardSprite *) m_pBeautiesOpen->objectAtIndex(0);
-        firstBeauty = (CardSprite *) m_pBeautiesOpen->objectAtIndex(1);
-
-        CCLog("-----%d-------", currentBeauty->getLevel());
-        CCLog("-----%d-------", firstBeauty->getLevel());
-        CCLog("-----========================------");
-        if(currentBeauty->getLevel() == firstBeauty->getLevel()){
-            CCLog("it is the same");
-            currentBeauty->hideCard();
-            firstBeauty->hideCard();
-            
-        }else{
-            currentBeauty->closeCard();
-            firstBeauty->closeCard();  
-            if(m_pBeautiesOpen->count()> 2){
-                secondBeauty = (CardSprite *) m_pBeautiesOpen->objectAtIndex(2);
-                secondBeauty->closeCard();
-            }
-
-        }
-        
-    }
-    CCLog("wwwwwwwwwwww %d wwwwww", m_pBeautiesOpen->count());
-    m_pBeautiesOpen->removeAllObjects();
-   
-
-    
-    //CCLog();
 }
 
 
-void GameScene::okForClip()
+bool GameScene::isOkForClip()
 {
     CCLog("okfor clip");
+    if(firstBeauty && secondBeauty){
+        return false;
+    }else{
+        return true;
+    }
+    
+}
+
+void GameScene::gameLogic(CardSprite* card)
+{
+    //CCLog("qqqqqq   %d qqqqqq", card);
+    if(!firstBeauty){
+        firstBeauty = card;
+        return;
+    }
+
+    if(firstBeauty && !secondBeauty){
+        secondBeauty = card;
+    }
+
+    if(firstBeauty && secondBeauty && !currentBeauty){
+        currentBeauty = card;
+    }
+    
+    if(firstBeauty && secondBeauty){
+        CCLog("firstBeauty   %d firstBeauty", firstBeauty);
+        CCLog("secondBeauty   %d secondBeauty", secondBeauty);
+        if((firstBeauty == secondBeauty)){
+            firstBeauty->closeCard();
+            firstBeauty = NULL;
+            secondBeauty = NULL;
+            CCLog("======   %d ======", firstBeauty);
+            return;        
+        }else{
+
+            if(firstBeauty->getLevel() == secondBeauty->getLevel()){
+                firstBeauty->hideCard();
+                secondBeauty->hideCard();
+                firstBeauty = NULL;
+                secondBeauty = NULL;
+            }else{
+                firstBeauty->closeCard();
+                secondBeauty->closeCard();
+                currentBeauty->closeCard();
+                firstBeauty = secondBeauty;
+                secondBeauty = NULL;
+                currentBeauty = NULL;
+            }        
+        }
+
+    }
+    
+}
+
+
+void GameScene::bindCallbacks()
+{
+    UIWidget* root = dynamic_cast<UIPanel*>(ul->getWidgetByTag(EXAMPLE_PANEL_TAG_ROOT));
+    //back to helloworld
+    UIButton* back_btn = dynamic_cast<UIButton*>(root->getChildByName("back")); 
+    back_btn->addReleaseEvent(this, coco_releaseselector(GameScene::backToMenu));
+}
+
+void GameScene::backToMenu(CCObject* pSender)
+{   int i =0;
+    int count = (int)(m_pBeautiesRoot->count());
+    CCLog("cout is %d", count);
+    for(int i = 0; i < count; i++){
+    
+        CardSprite * _Beauty = (CardSprite *)m_pBeautiesRoot->objectAtIndex(i);
+        //_Beauty->touchDelegateRelease();
+        
+        _Beauty->touchDelegateRelease();
+        CCLog("release");
+    }
+    
+    //m_pBeautiesRoot->removeAllObjects();
+    
+    CCDirector* pDirector = CCDirector::sharedDirector();
+    //pDirector->purgeCachedData();
+    CCScene *pScene = Menu::scene();
+    CCDirector::sharedDirector()->replaceScene(CCTransitionMoveInR::create(1, pScene));
 }
 void GameScene::menuCloseCallback(CCObject* pSender)
 {
