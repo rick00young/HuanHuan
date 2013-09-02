@@ -2,7 +2,7 @@
 #include "MenuScene.h"
 using namespace cocos2d;
 
-GameScene::GameScene() : firstBeauty(NULL),secondBeauty(NULL), currentBeauty(NULL)
+GameScene::GameScene() : firstBeauty(NULL),secondBeauty(NULL), currentBeauty(NULL), okforClip(true)
 {
 
 }
@@ -62,6 +62,7 @@ bool GameScene::init()
         ui->setWidgetTag(EXAMPLE_PANEL_TAG_ROOT);
         ul->addWidget(ui);
 
+        //CCLog("game_level is %d", GameLevel);
         //scheduleUpdate();
         bindCallbacks();
         bRet = true;
@@ -95,7 +96,7 @@ void GameScene::intBeauties(){
     //LinkIcon* _linkIcon = LinkIcon::initLinkIcon(m_pBatchNode, 1);
     //m_pBatchNode->addChild(_linkIcon);
     
-    for(int i = 0;i < 6; i++){
+    for(int i = 0;i < 4; i++){
         int index = rand() % 7;
         CCLog("the index is %d", index);
         CardSprite* _Beauty = CardSprite::create(this, index);
@@ -140,7 +141,7 @@ void GameScene::setBeautiesPosition(){
     while(index < (int)(m_pBeautiesRoot->count())){
         CardSprite * _Beauty = (CardSprite *)m_pBeautiesRoot->objectAtIndex(index);
         //CCLog("the index is %d", m_pIconsRoot->indexOfObject(_linkIcon));
-        if(index % 6 ==0){
+        if(index % 4 ==0){
             x = 84;
             if( index > 1)
                 y = y + 140;
@@ -151,7 +152,7 @@ void GameScene::setBeautiesPosition(){
             reorderChild(_Beauty, index + 1);
             
         }else{
-            x = x + 60;
+            x = x + 100;
             moveTo = CCMoveTo::create(0.5f, ccp(x,y));
             _Beauty->runAction(moveTo);
 
@@ -165,8 +166,14 @@ void GameScene::setBeautiesPosition(){
         
         
     }
-    
-    
+    /*
+    CCParticleSystem* m_emitter = CCParticleFlower::create();
+    m_emitter->retain();
+    this->addChild(m_emitter, 10);
+    m_emitter->setTexture( CCTextureCache::sharedTextureCache()->addImage("stars.png") ); 
+    m_emitter->setPosition(ccp(240, 160));
+    */
+
 }
 
 
@@ -177,18 +184,21 @@ void GameScene::update(float time){
 
 bool GameScene::isOkForClip()
 {
-    CCLog("okfor clip");
-    if(firstBeauty && secondBeauty){
-        return false;
-    }else{
+    
+    if((!firstBeauty || !secondBeauty) && okforClip){
+        okforClip = false;
+        CCLog("okfor clip");
         return true;
     }
+    return false;
     
 }
 
 void GameScene::gameLogic(CardSprite* card)
 {
     //CCLog("qqqqqq   %d qqqqqq", card);
+    okforClip = true;
+
     if(!firstBeauty){
         firstBeauty = card;
         return;
@@ -210,7 +220,7 @@ void GameScene::gameLogic(CardSprite* card)
             firstBeauty = NULL;
             secondBeauty = NULL;
             CCLog("======   %d ======", firstBeauty);
-            return;        
+            //return;        
         }else{
 
             if(firstBeauty->getLevel() == secondBeauty->getLevel()){
@@ -229,7 +239,7 @@ void GameScene::gameLogic(CardSprite* card)
         }
 
     }
-    
+    okforClip = true;
 }
 
 

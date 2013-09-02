@@ -133,7 +133,7 @@ void CardSprite::hideCard()
     CCFiniteTimeAction *releaseFunc = CCCallFunc::create(this, callfunc_selector(CardSprite::setDone));
     this->runAction(CCSequence::create(delay, CCSpawn::create(_CCFadeOut, _CCScaleTo, _CCRotateTo, NULL), releaseFunc, NULL));
 
-    _isDone = true;;
+    _isDone = true;
 }
 
 void CardSprite::touchDelegateRetain()
@@ -150,6 +150,7 @@ void CardSprite::touchDelegateRelease()
 }
 
 bool CardSprite::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent){
+    //CCLog("touch one");
 
     CCSprite* inCard = (CCSprite*)getChildByTag(tag_inCard);
     CCSprite* outCard = (CCSprite*)getChildByTag(tag_outCard);
@@ -164,11 +165,17 @@ bool CardSprite::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent){
     float h = inCard->boundingBox().size.height;
     CCRect rect = CCRectMake(pos.x - w/2, pos.y - h/2 , w, h);
 
+    //CCLog("touch two");
     //CCLog("this box is %f---%f", rect.size.width, rect.size.height);
     if(rect.containsPoint(pt)){
-        if(isReady && this->getgameScene()->isOkForClip()){
+        if(!(this->isVisible()) || _isDone){
+            CCLog("no touch");
+            return true;       
+        }
+        if(isReady && this->getgameScene()->isOkForClip() && this->isVisible()){
             m_isOpened = true;
             //CCLog("containsPoint");
+            CCLog("touch three");
             this->openCard();
         }
         return true;
@@ -196,6 +203,7 @@ bool CardSprite::getDone()
 }
 
 void CardSprite::setDone(){
+    CCLog("set done");
     this->setVisible(false);
     _isDone = true;
 }
@@ -207,6 +215,7 @@ void CardSprite::changeStatus()
         this->getgameScene()->gameLogic(this);
     }
     
+    //this->getParent()->
     //return;
     /*
     if(m_isOpened){

@@ -126,8 +126,9 @@ void HelloWorld::closeAbout(CCObject *pSender)
     UIImageView* about_bg = dynamic_cast<UIImageView*>(ul->getWidgetByName("about_bg"));
 
     CCSize size = CCDirector::sharedDirector()->getWinSize();
-    about_bg->setPosition(ccp(size.width/2, size.height));
+    //about_bg->setPosition(ccp(size.width/2, size.height));
     CCMoveTo* moveTo = CCMoveTo::create(0.5f, ccp(size.width/2, size.height*2));
+    CCActionInterval* action = CCSequence::create(CCDelayTime::create(1.0f), moveTo, NULL);
     about_bg->runAction(CCActionEase::create(moveTo));
     
 }

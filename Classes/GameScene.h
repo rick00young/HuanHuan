@@ -14,6 +14,8 @@ using namespace cocos2d::extension;
 
 #define HEIGHT 62
 
+
+
 class GameScene : public cocos2d::CCLayer
 {
 public:
@@ -37,6 +39,8 @@ public:
     CC_SYNTHESIZE(cocos2d::CCArray *, m_pBeautiesOpen, BeautiesOpen);
     //virtual void ccTouchesBegan(cocos2d::CCSet *pTouches, cocos2d::CCEvent *pEvent);
     //virtual void ccTouchesEnded(cocos2d::CCSet *pTouches, cocos2d::CCEvent *pEvent);
+    static int GameLevel;
+    
     bool isOkForClip();
     void gameLogic(CardSprite* card);
     void bindCallbacks();
@@ -48,6 +52,7 @@ private:
     void intBeauties();
     void setBeautiesPosition();
     void disPatchBeauties();
+    bool okforClip;
     CardSprite* currentBeauty;
     CardSprite* firstBeauty;
     CardSprite* secondBeauty;
