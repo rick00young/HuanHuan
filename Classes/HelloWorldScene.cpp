@@ -1,5 +1,5 @@
 #include "HelloWorldScene.h"
-#include "MenuScene.h"
+//#include "MenuScene.h"
 #include "SimpleAudioEngine.h"
 
 using namespace cocos2d;
